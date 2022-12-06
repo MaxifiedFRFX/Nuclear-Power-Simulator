@@ -1,13 +1,34 @@
-import { Card, CardContent, Button, Typography } from "@mui/material"
+import { Card, CardContent, CardHeader, Button } from "@mui/material"
+import SafeReactor from '../assets/SafeReactor.svg'
+
 const ReactorCard = (props) => {
 
     return (
         <div>
-            <Card className="videoCard" sx={{ width: "345px", height: "300px",
-                boxShadow: "rgba(0, 0, 0, 0.25) 0px 54px 55px,rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px" }}>
-            </Card>
+            <Card className="ReactorCard" sx={{
+                width: "350px", height: "220px",
+                background: "#BFD7EA",
+                boxShadow: "inset 0px 4px 4px rgba(0, 0, 0, 0.25)",
+                borderRadius: "4px",
+                backgroundImage: `url(${SafeReactor})`,
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "bottom right -30px",
 
-        </div>
+            }}>
+                <Card className="ReactorInnerCard" sx={{
+                    position: "relative",
+                    top: "20px",
+                    left: "20px",
+                    width: "200px", height: "181px",
+                    background: "#FFFDF2",
+                    boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                    borderRadius: "3px",
+                }}>
+                </Card>
+                <Button variant="contained" color="info">More Details</Button>
+                <Button variant="contained" color="error" sx={{ position: "relative", left: "150px", bottom: "10px", fontSize: "12px", }}>Emergency Shutdown</Button>
+            </Card>
+        </div >
 
     )
 }
