@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Button } from '@mui/material'
 import './App.css'
+import ReactorCard from './components/ReactorCard'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -53,6 +54,7 @@ function App() {
         </section>
         <section className="reactorsDisplay">
           <h1>Reactors</h1>
+          <ReactorCard />
         </section>
       </div>
       <footer>
