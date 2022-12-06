@@ -1,5 +1,5 @@
 {
-  "name": "nuclear-power-simulator",
+  "name": "create-vite",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,14 +9,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/material": "^5.10.16",
+    "chart.js": "^4.0.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "yarn": "^1.22.19"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.24",
     "@types/react-dom": "^18.0.8",
     "@vitejs/plugin-react": "^2.2.0",
-    "vite": "^3.2.4"
+    "vite": "^3.2.3"
   }
 }
