@@ -4,7 +4,7 @@ import './App.css'
 import ReactorCard from './components/ReactorCard'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [powerPlantName, setPowerPlantName] = useState('Set Power Plant Name')
   const canvasRef = useRef(null)
 
   useEffect(() => {
@@ -41,7 +41,7 @@ function App() {
         <section className="dashboard">
           <div className="plantName">
             <Button variant="contained">Change Name</Button>
-            <h1>Power Plant</h1>
+            <input type="text" placeholder={powerPlantName}></input>
           </div>
           <div className="graphAllReactors">
             <canvas ref={canvasRef}></canvas>

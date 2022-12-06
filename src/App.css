@@ -22,6 +22,15 @@
   height: calc(100vh - 54px);
 }
 
+input {
+  background: rgba(11, 57, 84, 0.00);
+  border: 0;
+}
+
+input::placeholder {
+  color: red;
+}
+
 .reactorsDisplay {
   background-color: #D9D9D9;
   width: 475px;
