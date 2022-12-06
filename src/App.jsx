@@ -12,10 +12,10 @@ function App() {
     const myChart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange', 'sdf', 'sdf', 'erqqwer'],
         datasets: [{
           label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3],
+          data: [12, 19, 3, 5, 2, 3, 1, 5, 6],
           borderWidth: 1
         }]
       },
@@ -43,9 +43,7 @@ function App() {
             <h1>Power Plant</h1>
           </div>
           <div className="graphAllReactors">
-            <div>
               <canvas ref={canvasRef}></canvas>
-            </div>
           </div>
           <div className="totalOutput">
             <h2>Average Temperature: 1234</h2>
