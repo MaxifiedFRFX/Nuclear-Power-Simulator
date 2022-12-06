@@ -22,10 +22,6 @@
   height: calc(100vh - 54px);
 }
 
-canvas {
-  width: 100%;
-}
-
 .reactorsDisplay {
   background-color: #D9D9D9;
   width: 475px;
@@ -82,7 +78,8 @@ footer {
 
 .reactorsFooter {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 
   background-color: #696969;
   width: 475px;
@@ -92,4 +89,5 @@ footer {
 .reactorsFooter Button {
   position: relative;
   top: -20px;
+  width: 280px;
 }

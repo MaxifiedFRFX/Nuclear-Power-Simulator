@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Button } from '@mui/material'
+import { Button, Link } from '@mui/material'
 import './App.css'
 import ReactorCard from './components/ReactorCard'
 
@@ -40,11 +40,11 @@ function App() {
       <div className="powerPlant">
         <section className="dashboard">
           <div className="plantName">
-            <button>Change Name</button>
+            <Button variant="contained">Change Name</Button>
             <h1>Power Plant</h1>
           </div>
           <div className="graphAllReactors">
-              <canvas ref={canvasRef}></canvas>
+            <canvas ref={canvasRef}></canvas>
           </div>
           <div className="totalOutput">
             <h2>Average Temperature: 1234</h2>
@@ -66,6 +66,9 @@ function App() {
         </section>
         <section className="reactorsFooter">
           <Button variant="contained" color="error">Global Emergency Shutdown</Button>
+          <Link href="https://www.freepik.com/free-vector/nuclear-energy-icons-yellow-background_3977300.htm#query=reactors&position=28&from_view=search&track=sph%22%3EImage" underline="hover" color="inherit">
+            {'Reactor Image by macrovector on Freepik'}
+          </Link>
         </section>
       </footer>
     </>
