@@ -5,7 +5,16 @@ import ReactorCard from './components/ReactorCard'
 
 function App() {
   const [powerPlantName, setPowerPlantName] = useState('Set Power Plant Name')
+  const [hotStuff, setHotStuff] = useState("")
   const canvasRef = useRef(null)
+
+  useEffect(() => {
+    (async () => {
+      const rawData = await fetch("https://nuclear.dacoder.io/reactors?apiKey=1ca0a1826e8c6b39")
+      const jsonData = await rawData.json()
+      setHotStuff(jsonData)
+    })()
+  }, [])
 
   useEffect(() => {
     const ctx = canvasRef.current
@@ -41,7 +50,7 @@ function App() {
         <section className="dashboard">
           <div className="plantName">
             <Button variant="contained">Change Name</Button>
-            <input type="text" placeholder={powerPlantName}></input>
+            <input type="text" placeholder={hotStuff["plant_name"]}></input>
           </div>
           <div className="graphAllReactors">
             <canvas ref={canvasRef}></canvas>
@@ -54,7 +63,13 @@ function App() {
         </section>
         <section className="reactorsDisplay">
           <h1>Reactors</h1>
-          <ReactorCard />
+          {
+            hotStuff === "" ? "loading": hotStuff["reactors"].map(reactor => (
+              <div key={reactor.id}>
+                <ReactorCard />
+              </div>
+            ))
+          }
         </section>
       </div>
       <footer>
