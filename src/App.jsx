@@ -6,7 +6,6 @@ import { json } from 'react-router-dom'
 
 function App() {
     const [powerPlantInput, setPowerPlantInput] = useState("")
-    const [powerPlantName, setPowerPlantName] = useState('Set Power Plant Name')
     const [logs, setLogs] = useState([])
     const [hotStuff, setHotStuff] = useState("")
     const [hotStuffRendering, setHotStuffRendering] = useState(true)
@@ -54,7 +53,7 @@ function App() {
           method: "PUT",
           body: JSON.stringify({ name: powerPlantInput }),
         })
-        const jsonData = await rawData.json()
+        setPowerPlantInput("")
     }
 
     const fetchLogData = async () => {
@@ -78,7 +77,7 @@ function App() {
     }
 
     useEffect(() => {
-        const idTimer = setInterval(fetchLogData, 1000)
+        const idTimer = setInterval(interval, 1000)
 
         return () => {
             clearInterval(idTimer)
@@ -120,7 +119,7 @@ function App() {
                 <section className="dashboard">
                     <div className="plantName">
                         <Button variant="contained" onClick={handleNewPlantName}>Change Name</Button>
-                        <input type="text" value={powerPlantInput} placeholder={powerPlantName} onChange={(event) => setPowerPlantInput(event.target.value)}></input>
+                        <input type="text" value={powerPlantInput} placeholder={hotStuff.plant_name} onChange={(event) => setPowerPlantInput(event.target.value)}></input>
                     </div>
                     <div className="graphAllReactors">
                         <canvas ref={canvasRef}></canvas>
