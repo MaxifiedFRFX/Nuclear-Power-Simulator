@@ -47,8 +47,8 @@ function App() {
         setHotStuffRendering(false)
     }
 
-    const handleNewPlantName = async (event) => {
-        const rawData = await fetch("https://nuclear.dacoder.io/reactors/plant-name?apiKey=1ca0a1826e8c6b39", {
+    const handleNewPlantName = async () => {
+        await fetch("https://nuclear.dacoder.io/reactors/plant-name?apiKey=1ca0a1826e8c6b39", {
           headers: { 'Accept': 'application/json', 'Content-Type': 'application/json'},
           method: "PUT",
           body: JSON.stringify({ name: powerPlantInput }),
@@ -68,7 +68,6 @@ function App() {
             })
         })
         setLogs(flattenedLogs)
-        console.log(flattenedLogs)
     }
 
     const interval = () => {
