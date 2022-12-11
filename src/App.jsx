@@ -55,16 +55,7 @@ function App() {
           body: JSON.stringify({ name: powerPlantInput }),
         })
         const jsonData = await rawData.json()
-      }
-
-    const handleNewPlantName = async (event) => {
-        const rawData = await fetch("https://nuclear.dacoder.io/reactors/plant-name?apiKey=1ca0a1826e8c6b39", {
-          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json'},
-          method: "PUT",
-          body: JSON.stringify({ name: powerPlantInput }),
-        })
-        const jsonData = await rawData.json()
-      }
+    }
 
     const fetchLogData = async () => {
         const rawData = await fetch("https://nuclear.dacoder.io/reactors/logs?apiKey=1ca0a1826e8c6b39")
@@ -87,13 +78,8 @@ function App() {
     }
 
     useEffect(() => {
-<<<<<<< Updated upstream
-        const idTimer = setInterval(interval, 1000)
-
-=======
         const idTimer = setInterval(fetchLogData, 1000)
-        
->>>>>>> Stashed changes
+
         return () => {
             clearInterval(idTimer)
         }
