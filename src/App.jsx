@@ -5,6 +5,7 @@ import ReactorCard from './components/ReactorCard'
 import { json } from 'react-router-dom'
 
 function App() {
+    const [powerPlantInput, setPowerPlantInput] = useState("")
     const [powerPlantName, setPowerPlantName] = useState('Set Power Plant Name')
     const [logs, setLogs] = useState([])
     const [hotStuff, setHotStuff] = useState("")
@@ -47,6 +48,24 @@ function App() {
         setHotStuffRendering(false)
     }
 
+    const handleNewPlantName = async (event) => {
+        const rawData = await fetch("https://nuclear.dacoder.io/reactors/plant-name?apiKey=1ca0a1826e8c6b39", {
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json'},
+          method: "PUT",
+          body: JSON.stringify({ name: powerPlantInput }),
+        })
+        const jsonData = await rawData.json()
+      }
+
+    const handleNewPlantName = async (event) => {
+        const rawData = await fetch("https://nuclear.dacoder.io/reactors/plant-name?apiKey=1ca0a1826e8c6b39", {
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json'},
+          method: "PUT",
+          body: JSON.stringify({ name: powerPlantInput }),
+        })
+        const jsonData = await rawData.json()
+      }
+
     const fetchLogData = async () => {
         const rawData = await fetch("https://nuclear.dacoder.io/reactors/logs?apiKey=1ca0a1826e8c6b39")
         const jsonData = await rawData.json()
@@ -68,8 +87,13 @@ function App() {
     }
 
     useEffect(() => {
+<<<<<<< Updated upstream
         const idTimer = setInterval(interval, 1000)
 
+=======
+        const idTimer = setInterval(fetchLogData, 1000)
+        
+>>>>>>> Stashed changes
         return () => {
             clearInterval(idTimer)
         }
@@ -109,8 +133,8 @@ function App() {
             <div className="powerPlant">
                 <section className="dashboard">
                     <div className="plantName">
-                        <Button variant="contained">Change Name</Button>
-                        <input type="text" placeholder={hotStuff["plant_name"]}></input>
+                        <Button variant="contained" onClick={handleNewPlantName}>Change Name</Button>
+                        <input type="text" value={powerPlantInput} placeholder={powerPlantName} onChange={(event) => setPowerPlantInput(event.target.value)}></input>
                     </div>
                     <div className="graphAllReactors">
                         <canvas ref={canvasRef}></canvas>
