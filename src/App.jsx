@@ -45,7 +45,7 @@ function App() {
   }, [])
 
   return (
-    <>
+    <div className="body">
       <div className="powerPlant">
         <section className="dashboard">
           <div className="plantName">
@@ -86,7 +86,7 @@ function App() {
           </Link>
         </section>
       </footer>
-    </>
+    </div>
   )
 }
 
