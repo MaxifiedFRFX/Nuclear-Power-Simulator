@@ -66,7 +66,7 @@ function App() {
           {
             hotStuff === "" ? "loading": hotStuff["reactors"].map(reactor => (
               <div key={reactor.id}>
-                <ReactorCard />
+                <ReactorCard allReactors = { reactor }/>
               </div>
             ))
           }
