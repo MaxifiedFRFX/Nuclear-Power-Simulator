@@ -5,6 +5,7 @@ import ReactorCard from './components/ReactorCard'
 
 function App() {
   const [powerPlantName, setPowerPlantName] = useState('Set Power Plant Name')
+  const [logs, setLogs] = useState([])
   const [hotStuff, setHotStuff] = useState("")
   const canvasRef = useRef(null)
 
@@ -13,6 +14,14 @@ function App() {
       const rawData = await fetch("https://nuclear.dacoder.io/reactors?apiKey=1ca0a1826e8c6b39")
       const jsonData = await rawData.json()
       setHotStuff(jsonData)
+    })()
+  }, [])
+
+  useEffect(() => {
+    (async () => {
+      const rawData = await fetch("https://nuclear.dacoder.io/reactors/logs?apiKey=1ca0a1826e8c6b39")
+      const jsonData = await rawData.json()
+      setLogs(jsonData)
     })()
   }, [])
 
@@ -59,14 +68,22 @@ function App() {
             <h2>Average Temperature: 1234</h2>
             <h2>Total Output: 1234 GW</h2>
           </div>
-          <div className="systemLogs"></div>
+          <div className="systemLogs">
+            {
+              logs === "" ? "loading" : logs.map(log => {
+                  for(const arr of Object.values(log)) {
+                  <p>{arr}</p>
+                  }
+              })
+            }
+          </div>
         </section>
         <section className="reactorsDisplay">
           <h1>Reactors</h1>
           {
-            hotStuff === "" ? "loading": hotStuff["reactors"].map(reactor => (
+            hotStuff === "" ? "loading" : hotStuff["reactors"].map(reactor => (
               <div key={reactor.id}>
-                <ReactorCard allReactors = { reactor }/>
+                <ReactorCard allReactors={reactor} />
               </div>
             ))
           }
