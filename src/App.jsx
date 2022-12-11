@@ -132,14 +132,29 @@ function App() {
         }
     }, [hotStuffRendering])
 
-    useEffect(() => {
-        (async () => {
+    const fetchLogData = async () => {
+        const rawData = await fetch("https://nuclear.dacoder.io/reactors/logs?apiKey=1ca0a1826e8c6b39")
+        const jsonData = await rawData.json()
 
-            const rawData = await fetch("https://nuclear.dacoder.io/reactors/logs?apiKey=1ca0a1826e8c6b39")
-            const jsonData = await rawData.json()
-            setLogs(jsonData)
-        })()
+        // [{key: []}, {key: []}, {key: []}]
+        // [[1, 2], [3, 4]] ==> [1, 2, 3, 4]
+        const flattenedLogs = jsonData.flatMap(obj => {
+            return Object.keys(obj).flatMap(key => {
+                return obj[key]
+            })
+        })
+        setLogs(flattenedLogs)
+        console.log(flattenedLogs)
+    }
+
+    useEffect(() => {
+        const idTimer = setInterval(fetchLogData, 1000)
+
+        return () => {
+            clearInterval(idTimer)
+        }
     }, [])
+
 
     useEffect(() => {
         const ctx = canvasRef.current
@@ -186,10 +201,8 @@ function App() {
                     </div>
                     <div className="systemLogs">
                         {
-                            logs === "" ? "loading" : logs.map(log => {
-                                for (const arr of Object.values(log)) {
-                                    <p>{arr}</p>
-                                }
+                            logs.map(log => {
+                                return <p key={log}>{log}</p>
                             })
                         }
                     </div>
@@ -199,7 +212,7 @@ function App() {
                     {
                         hotStuff === "" ? "loading" : hotStuff["reactors"].map(reactor => (
                             <div key={reactor.id}>
-                                <ReactorCard reactor={reactor} hotStuffRendering={hotStuffRendering}/>
+                                <ReactorCard reactor={reactor} hotStuffRendering={hotStuffRendering} />
                             </div>
                         ))
                     }
