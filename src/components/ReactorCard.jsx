@@ -1,14 +1,14 @@
 import { Card, CardContent, Button, Typography, Table, TableBody, TableCell, TableContainer, TableRow, Paper } from "@mui/material"
-import { Link, Router, Route } from "react-router-dom"
+import { Link } from "react-router-dom"
 import SafeReactor from '../assets/SafeReactor.svg'
 
 const ReactorCard = (props) => {
-    const { reactor, hotStuffRendering } = props;
+    const { reactor} = props;
 
     const rows = { temp: "79\xB0", tempLevel: "safe", status: "Online", output: "4239 MW" }
 
     return (
-        <div className="reacterCard">
+        <div>
             <Card className="reactorCard" sx={{
                 width: "355px",
                 height: "230px",
@@ -42,14 +42,14 @@ const ReactorCard = (props) => {
                                         <TableCell component="th" scope="row" sx={{ fontSize: "12px" }}>
                                             Temperature:
                                         </TableCell>
-                                        <TableCell sx={{ fontSize: "12px" }}>{(parseFloat(reactor.temperature?.amount).toFixed(2) ?? "...")  + 
-                                        ((reactor.temperature?.unit == "celsius") ? "\xB0 C" : "\xB0 F")}</TableCell>
+                                        <TableCell sx={{ fontSize: "12px" }}>{(parseFloat(reactor.temperature?.amount).toFixed(2) ?? "...") +
+                                            ((reactor.temperature?.unit == "celsius") ? "\xB0 C" : "\xB0 F")}</TableCell>
                                     </TableRow>
                                     <TableRow
                                         key={1}
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     >
-                                        <TableCell component="th" scope="row" sx={{ fontSize: "10px" }}>
+                                        <TableCell component="th" scope="row" sx={{ fontSize: "8px" }}>
                                             Temperature Level:
                                         </TableCell>
                                         <TableCell sx={{ fontSize: "12px" }}>{reactor.temperature?.status ?? "..."}</TableCell>
@@ -70,14 +70,17 @@ const ReactorCard = (props) => {
                                         <TableCell component="th" scope="row" sx={{ fontSize: "12px" }}>
                                             Output:
                                         </TableCell>
-                                        <TableCell sx={{ fontSize: "10px" }}>{reactor.output?.amount ?? "..."}</TableCell>
+                                        <TableCell sx={{ fontSize: "10px" }}>{(parseFloat(reactor.output?.amount).toFixed(2) ?? "...") +
+                                            ((reactor.output?.unit == "Megawatt (MW)") ? " MW" : "GW")}</TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>
                         </TableContainer>
                     </CardContent>
                 </Card>
-                <Button variant="contained" color="info" size="small" sx={{ position: "relative", left: "10px", bottom: "-5px", fontSize: "10px", }}>More Details</Button>
+                <Link to={reactor.id}>
+                    <Button variant="contained" color="info" size="small" sx={{ position: "relative", left: "10px", bottom: "-5px", fontSize: "10px", }}>More Details</Button>
+                </Link>
                 <Button variant="contained" color="error" size="small" sx={{ position: "relative", left: "80px", bottom: "-5px", fontSize: "10px", }}>Emergency Shutdown</Button>
             </Card>
         </div >
