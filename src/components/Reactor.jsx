@@ -1,9 +1,9 @@
 import { Card, CardContent, Button, Typography, Table, TableBody, TableCell, TableContainer, TableRow, Paper } from "@mui/material"
-import { Link, Router, Route } from "react-router-dom"
+import { Link, Router } from "react-router-dom"
 import SafeReactor from '../assets/SafeReactor.svg'
 
-const ReactorCard = (props) => {
-    const { reactor, hotStuffRendering } = props;
+const Reactor = (props) => {
+    const { reactor } = props
 
     const rows = { temp: "79\xB0", tempLevel: "safe", status: "Online", output: "4239 MW" }
 
@@ -31,7 +31,7 @@ const ReactorCard = (props) => {
                     borderRadius: "3px",
                 }}>
                     <CardContent>
-                        <Typography>{reactor.name}</Typography>
+                        <Typography>yo{reactor.plant_name}</Typography>
                         <TableContainer component={Paper}>
                             <Table size="small" aria-label="a dense table">
                                 <TableBody>
@@ -42,7 +42,7 @@ const ReactorCard = (props) => {
                                         <TableCell component="th" scope="row" sx={{ fontSize: "12px" }}>
                                             Temperature:
                                         </TableCell>
-                                        <TableCell sx={{ fontSize: "12px" }}>{(reactor.hasOwnProperty('temperature')) ? reactor.temperature.amount + (reactor.tempeture == "celsius") ? "\xB0 C" : "\xB0 F" : "..."}</TableCell>
+                                        <TableCell sx={{ fontSize: "12px" }}>{rows.temp}</TableCell>
                                     </TableRow>
                                     <TableRow
                                         key={1}
@@ -76,7 +76,7 @@ const ReactorCard = (props) => {
                         </TableContainer>
                     </CardContent>
                 </Card>
-                <Button variant="contained" color="info" size="small" sx={{ position: "relative", left: "10px", bottom: "-5px", fontSize: "10px", }}>More Details</Button>
+                    <Button variant="contained" color="info" size="small" sx={{ position: "relative", left: "10px", bottom: "-5px", fontSize: "10px", }}>More Details</Button>
                 <Button variant="contained" color="error" size="small" sx={{ position: "relative", left: "80px", bottom: "-5px", fontSize: "10px", }}>Emergency Shutdown</Button>
             </Card>
         </div >
@@ -84,4 +84,4 @@ const ReactorCard = (props) => {
     )
 }
 
-export default ReactorCard
+export default Reactor
