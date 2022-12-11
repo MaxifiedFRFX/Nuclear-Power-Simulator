@@ -42,7 +42,8 @@ const ReactorCard = (props) => {
                                         <TableCell component="th" scope="row" sx={{ fontSize: "12px" }}>
                                             Temperature:
                                         </TableCell>
-                                        <TableCell sx={{ fontSize: "12px" }}>{(reactor.hasOwnProperty('temperature')) ? reactor.temperature.amount + (reactor.tempeture == "celsius") ? "\xB0 C" : "\xB0 F" : "..."}</TableCell>
+                                        <TableCell sx={{ fontSize: "12px" }}>{(parseFloat(reactor.temperature?.amount).toFixed(2) ?? "...")  + 
+                                        ((reactor.temperature?.unit == "celsius") ? "\xB0 C" : "\xB0 F")}</TableCell>
                                     </TableRow>
                                     <TableRow
                                         key={1}
@@ -51,7 +52,7 @@ const ReactorCard = (props) => {
                                         <TableCell component="th" scope="row" sx={{ fontSize: "10px" }}>
                                             Temperature Level:
                                         </TableCell>
-                                        <TableCell sx={{ fontSize: "12px" }}>{rows.tempLevel}</TableCell>
+                                        <TableCell sx={{ fontSize: "12px" }}>{reactor.temperature?.status ?? "..."}</TableCell>
                                     </TableRow>
                                     <TableRow
                                         key={2}
@@ -60,7 +61,7 @@ const ReactorCard = (props) => {
                                         <TableCell component="th" scope="row" sx={{ fontSize: "12px" }}>
                                             Status:
                                         </TableCell>
-                                        <TableCell sx={{ fontSize: "12px" }}>{rows.status}</TableCell>
+                                        <TableCell sx={{ fontSize: "12px" }}>{reactor.state ?? "..."}</TableCell>
                                     </TableRow>
                                     <TableRow
                                         key={3}
@@ -69,7 +70,7 @@ const ReactorCard = (props) => {
                                         <TableCell component="th" scope="row" sx={{ fontSize: "12px" }}>
                                             Output:
                                         </TableCell>
-                                        <TableCell sx={{ fontSize: "10px" }}>{rows.output}</TableCell>
+                                        <TableCell sx={{ fontSize: "10px" }}>{reactor.output?.amount ?? "..."}</TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>

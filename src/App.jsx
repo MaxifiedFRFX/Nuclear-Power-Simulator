@@ -11,126 +11,41 @@ function App() {
     const [hotStuffRendering, setHotStuffRendering] = useState(true)
     const canvasRef = useRef(null)
 
-    useEffect(() => {
-        (async () => {
-            const rawData = await fetch("https://nuclear.dacoder.io/reactors?apiKey=1ca0a1826e8c6b39")
-            const jsonData = await rawData.json()
-            setHotStuff(jsonData)
-            setHotStuffRendering(false)
-        })()
-    }, [])
+    const fetchAll = async () => {
+        const rawData = await fetch("https://nuclear.dacoder.io/reactors?apiKey=1ca0a1826e8c6b39")
+        const jsonData = await rawData.json()
+        jsonData.reactors = await Promise.all(jsonData.reactors.map(async reactor => {
+            const rawDataTemperature = await fetch(`https://nuclear.dacoder.io/reactors/temperature/${reactor.id}?apiKey=1ca0a1826e8c6b39`)
+            const jsonDataTemperature = await rawDataTemperature.json()
 
-    useEffect(() => {
-        if (!hotStuffRendering) {
-            (async () => {
-                console.log(hotStuff)
-                for (var i = 0; i < hotStuff.reactors.length; i++) {
-                    const rawData = await fetch(`https://nuclear.dacoder.io/reactors/temperature/${hotStuff.reactors[i].id}?apiKey=1ca0a1826e8c6b39`)
-                    const jsonData = await rawData.json()
-                    var newHotStuff = hotStuff
-                    newHotStuff.reactors[i].temperature = {
-                        "amount": jsonData.temperature.amount,
-                        "unit": jsonData.temperature.unit,
-                        "status": jsonData.temperature.status
-                    }
-                    setHotStuff(newHotStuff)
-                }
-                console.log("Finished hotStuff:")
-                console.log(hotStuff)
-            })()
-        }
-    }, [hotStuffRendering])
+            const rawDataOutput = await fetch(`https://nuclear.dacoder.io/reactors/output/${reactor.id}?apiKey=1ca0a1826e8c6b39`)
+            const jsonDataOutput = await rawDataOutput.json()
 
-    useEffect(() => {
-        if (!hotStuffRendering) {
-            (async () => {
-                console.log(hotStuff)
-                for (var i = 0; i < hotStuff.reactors.length; i++) {
-                    const rawData = await fetch(`https://nuclear.dacoder.io/reactors/output/${hotStuff.reactors[i].id}?apiKey=1ca0a1826e8c6b39`)
-                    const jsonData = await rawData.json()
-                    var newHotStuff = hotStuff
-                    newHotStuff.reactors[i].output = {
-                        "amount": jsonData.output.amount,
-                        "unit": jsonData.output.unit,
-                    }
-                    setHotStuff(newHotStuff)
-                }
-                console.log("Finished hotStuff:")
-                console.log(hotStuff)
-            })()
-        }
-    }, [hotStuffRendering])
+            const rawDataCoolant = await fetch(`https://nuclear.dacoder.io/reactors/coolant/${reactor.id}?apiKey=1ca0a1826e8c6b39`)
+            const jsonDataCoolant = await rawDataCoolant.json()
 
-    useEffect(() => {
-        if (!hotStuffRendering) {
-            (async () => {
-                console.log(hotStuff)
-                for (var i = 0; i < hotStuff.reactors.length; i++) {
-                    const rawData = await fetch(`https://nuclear.dacoder.io/reactors/coolant/${hotStuff.reactors[i].id}?apiKey=1ca0a1826e8c6b39`)
-                    const jsonData = await rawData.json()
-                    var newHotStuff = hotStuff
-                    newHotStuff.reactors[i].coolant = jsonData.coolant
-                    setHotStuff(newHotStuff)
-                }
-                console.log("Finished hotStuff:")
-                console.log(hotStuff)
-            })()
-        }
-    }, [hotStuffRendering])
+            const rawDataFuel = await fetch(`https://nuclear.dacoder.io/reactors/fuel-level/${reactor.id}?apiKey=1ca0a1826e8c6b39`)
+            const jsonDataFuel = await rawDataFuel.json()
 
-    useEffect(() => {
-        if (!hotStuffRendering) {
-            (async () => {
-                console.log(hotStuff)
-                for (var i = 0; i < hotStuff.reactors.length; i++) {
-                    const rawData = await fetch(`https://nuclear.dacoder.io/reactors/fuel-level/${hotStuff.reactors[i].id}?apiKey=1ca0a1826e8c6b39`)
-                    const jsonData = await rawData.json()
-                    var newHotStuff = hotStuff
-                    newHotStuff.reactors[i].fuel = jsonData.fuel.percentage
-                    setHotStuff(newHotStuff)
-                }
-                console.log("Finished hotStuff:")
-                console.log(hotStuff)
-            })()
-        }
-    }, [hotStuffRendering])
+            const rawDataReactorState = await fetch(`https://nuclear.dacoder.io/reactors/reactor-state/${reactor.id}?apiKey=1ca0a1826e8c6b39`)
+            const jsonDataReactorState = await rawDataReactorState.json()
 
-    useEffect(() => {
-        if (!hotStuffRendering) {
-            (async () => {
-                console.log(hotStuff)
-                for (var i = 0; i < hotStuff.reactors.length; i++) {
-                    const rawData = await fetch(`https://nuclear.dacoder.io/reactors/reactor-state/${hotStuff.reactors[i].id}?apiKey=1ca0a1826e8c6b39`)
-                    const jsonData = await rawData.json()
-                    var newHotStuff = hotStuff
-                    newHotStuff.reactors[i].state = jsonData.state
-                    setHotStuff(newHotStuff)
-                }
-                console.log("Finished hotStuff:")
-                console.log(hotStuff)
-            })()
-        }
-    }, [hotStuffRendering])
+            const rawDataRodState = await fetch(`https://nuclear.dacoder.io/reactors/rod-state/${reactor.id}?apiKey=1ca0a1826e8c6b39`)
+            const jsonDataRodState = await rawDataRodState.json()
 
-    useEffect(() => {
-        if (!hotStuffRendering) {
-            (async () => {
-                console.log(hotStuff)
-                for (var i = 0; i < hotStuff.reactors.length; i++) {
-                    const rawData = await fetch(`https://nuclear.dacoder.io/reactors/rod-state/${hotStuff.reactors[i].id}?apiKey=1ca0a1826e8c6b39`)
-                    const jsonData = await rawData.json()
-                    var newHotStuff = hotStuff
-                    newHotStuff.reactors[i].control_rods = {
-                        "in": jsonData.control_rods.in,
-                        "out": jsonData.control_rods.out
-                    }
-                    setHotStuff(newHotStuff)
-                }
-                console.log("Finished hotStuff:")
-                console.log(hotStuff)
-            })()
-        }
-    }, [hotStuffRendering])
+            return {
+                ...reactor,
+                temperature: jsonDataTemperature.temperature,
+                output: jsonDataOutput.output,
+                coolant: jsonDataCoolant.coolant,
+                fuel: jsonDataFuel.fuel.percentage,
+                state: jsonDataReactorState.state,
+                control_rods: jsonDataRodState.control_rods,
+            }
+        }))
+        setHotStuff(jsonData)
+        setHotStuffRendering(false)
+    }
 
     const fetchLogData = async () => {
         const rawData = await fetch("https://nuclear.dacoder.io/reactors/logs?apiKey=1ca0a1826e8c6b39")
@@ -147,8 +62,13 @@ function App() {
         console.log(flattenedLogs)
     }
 
+    const interval = () => {
+        fetchLogData()
+        fetchAll()
+    }
+
     useEffect(() => {
-        const idTimer = setInterval(fetchLogData, 1000)
+        const idTimer = setInterval(interval, 1000)
 
         return () => {
             clearInterval(idTimer)
@@ -210,7 +130,7 @@ function App() {
                 <section className="reactorsDisplay">
                     <h1>Reactors</h1>
                     {
-                        hotStuff === "" ? "loading" : hotStuff["reactors"].map(reactor => (
+                        hotStuffRendering ? "loading" : hotStuff.reactors.map(reactor => (
                             <div key={reactor.id}>
                                 <ReactorCard reactor={reactor} hotStuffRendering={hotStuffRendering} />
                             </div>
