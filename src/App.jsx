@@ -138,7 +138,7 @@ function App() {
                         <canvas ref={canvasRef}></canvas>
                     </div>
                     <div className="totalOutput">
-                        <h2>Average Temperature: 1234</h2>
+                        <h2>Average Temperature: {allAverTemp.slice(-1)}</h2>
                         <h2>Total Output: 1234 GW</h2>
                     </div>
                     <div className="systemLogs">
