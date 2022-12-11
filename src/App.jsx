@@ -6,8 +6,12 @@ import { json } from 'react-router-dom'
 
 function App() {
     const [powerPlantInput, setPowerPlantInput] = useState("")
+    const [allAverTemp, setAllAverTemp] = useState([])
     const [logs, setLogs] = useState([])
-    const [hotStuff, setHotStuff] = useState("")
+    const [hotStuff, setHotStuff] = useState({
+        plant_name: "",
+        reactors: []
+    })
     const [hotStuffRendering, setHotStuffRendering] = useState(true)
     const canvasRef = useRef(null)
 
@@ -49,9 +53,9 @@ function App() {
 
     const handleNewPlantName = async () => {
         await fetch("https://nuclear.dacoder.io/reactors/plant-name?apiKey=1ca0a1826e8c6b39", {
-          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json'},
-          method: "PUT",
-          body: JSON.stringify({ name: powerPlantInput }),
+            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+            method: "PUT",
+            body: JSON.stringify({ name: powerPlantInput }),
         })
         setPowerPlantInput("")
     }
@@ -70,17 +74,27 @@ function App() {
         setLogs(flattenedLogs)
     }
 
+    const getAverageTemp = hotStuff.reactors.reduce((acc, reactor) => {
+        return acc + reactor.temperature.amount
+    }, 0)/hotStuff.reactors.length
+
+    // const tempArray = 
+    
     const interval = () => {
         fetchLogData()
         fetchAll()
+        setAllAverTemp(prevAllAverTemp => [...prevAllAverTemp, getAverageTemp].slice(-200))
     }
 
     useEffect(() => {
         const idTimer = setInterval(interval, 1000)
-
+        // const dashTemp = setInterval(tempArray, 1000)
+        
         return () => {
             clearInterval(idTimer)
+            // clearInterval(dashTemp)
         }
+
     }, [])
 
 
@@ -90,10 +104,10 @@ function App() {
         const myChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange', 'sdf', 'sdf', 'erqqwer'],
+                labels: allAverTemp.map((index) => index),
                 datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3, 1, 5, 6],
+                    label: "Total Average Temperature",
+                    data: allAverTemp,
                     borderWidth: 1
                 }]
             },
@@ -110,7 +124,7 @@ function App() {
         return () => {
             myChart.destroy()
         }
-    }, [])
+    }, [allAverTemp])
 
     return (
         <div className="body">
