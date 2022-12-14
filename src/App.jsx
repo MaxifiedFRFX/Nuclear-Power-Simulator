@@ -78,8 +78,6 @@ function App() {
         return acc + reactor.temperature.amount
     }, 0)/hotStuff.reactors.length
 
-    // const tempArray = 
-    
     const interval = () => {
         fetchLogData()
         fetchAll()
@@ -164,7 +162,7 @@ function App() {
                 <section className="dashboardFooter">
                     <Button variant="contained">Enable Coolants on all Reactors</Button>
                     <Button variant="contained">Disable Coolants on all Reactors</Button>
-                    <Button variant="contained">Global Controlled Shutdown</Button>
+                    <Button variant="contained" onClick={handleGlobalControlledShutdown}>Global Controlled Shutdown</Button>
                     <Button variant="contained" color="error">Global Reset</Button>
                 </section>
                 <section className="reactorsFooter">
