@@ -76,7 +76,39 @@ function App() {
 
     const getAverageTemp = hotStuff.reactors.reduce((acc, reactor) => {
         return acc + reactor.temperature.amount
-    }, 0)/hotStuff.reactors.length
+    }, 0) / hotStuff.reactors.length
+
+    const handleGlobalControlledShutdown = hotStuff.reactors.map(async reactor => {
+        await fetch(`https://nuclear.dacoder.io/reactors/controlled-shutdown/${reactor.id}?apiKey=1ca0a1826e8c6b39`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })}
+    )
+
+    const globalEmergencyShutdown = hotStuff.reactors.map(async reactor => {
+        await fetch(` https://nuclear.dacoder.io/reactors/emergency-shutdown/${reactor.id}?apiKey=1ca0a1826e8c6b39`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })}
+    )
+
+    const globalReset = async () => {
+        await fetch(`https://nuclear.dacoder.io/reactors/reset?apiKey=1ca0a1826e8c6b39`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        }
+        )
+    }
+
 
     const interval = () => {
         fetchLogData()
@@ -87,7 +119,7 @@ function App() {
     useEffect(() => {
         const idTimer = setInterval(interval, 1000)
         // const dashTemp = setInterval(tempArray, 1000)
-        
+
         return () => {
             clearInterval(idTimer)
             // clearInterval(dashTemp)
@@ -122,7 +154,9 @@ function App() {
         return () => {
             myChart.destroy()
         }
-    }, [allAverTemp])
+    }, []
+    // [allAverTemp]
+    )
 
     return (
         <div className="body">
@@ -163,10 +197,10 @@ function App() {
                     <Button variant="contained">Enable Coolants on all Reactors</Button>
                     <Button variant="contained">Disable Coolants on all Reactors</Button>
                     <Button variant="contained" onClick={handleGlobalControlledShutdown}>Global Controlled Shutdown</Button>
-                    <Button variant="contained" color="error">Global Reset</Button>
+                    <Button variant="contained" color="error" onClick={globalReset}>Global Reset</Button>
                 </section>
                 <section className="reactorsFooter">
-                    <Button variant="contained" color="error">Global Emergency Shutdown</Button>
+                    <Button variant="contained" color="error" onClick={globalEmergencyShutdown}>Global Emergency Shutdown</Button>
                     <Link href="https://www.freepik.com/free-vector/nuclear-energy-icons-yellow-background_3977300.htm#query=reactors&position=28&from_view=search&track=sph%22%3EImage" underline="hover" color="inherit">
                         {'Reactor Image by macrovector on Freepik'}
                     </Link>
