@@ -180,7 +180,7 @@ const Reactor = () => {
                         Coolant State: {hotStuff.coolant ?? "..."}
                     </Typography>
                     <Typography className="info">
-                        Fuel: {parseFloat(hotStuff.fuel.percentage).toFixed(2) + "%" ?? "..."}
+                        Fuel: {parseFloat(hotStuff.fuel?.percentage).toFixed(2) + "%" ?? "..."}
                     </Typography>
                 </div>
             </div>
