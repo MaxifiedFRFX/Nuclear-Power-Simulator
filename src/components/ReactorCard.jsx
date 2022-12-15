@@ -5,7 +5,15 @@ import SafeReactor from '../assets/SafeReactor.svg'
 const ReactorCard = (props) => {
     const { reactor } = props;
 
-    const rows = { temp: "79\xB0", tempLevel: "safe", status: "Online", output: "4239 MW" }
+    const emergencyShutdown = async () => {
+            await fetch(`https://nuclear.dacoder.io/reactors/emergency-shutdown/${reactor.id}?apiKey=1ca0a1826e8c6b39`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                }
+            }).then(data => (!data.ok) ? console.log(data) : null)
+    }
 
     return (
         <div>
@@ -81,7 +89,7 @@ const ReactorCard = (props) => {
                 <Link to={reactor.id}>
                     <Button variant="contained" color="info" size="small" sx={{ position: "relative", left: "10px", bottom: "-5px", fontSize: "10px", }}>More Details</Button>
                 </Link>
-                <Button variant="contained" color="error" size="small" sx={{ position: "relative", left: "80px", bottom: "-5px", fontSize: "10px", }}>Emergency Shutdown</Button>
+                <Button variant="contained" color="error" size="small" onClick={emergencyShutdown} sx={{ position: "relative", left: "80px", bottom: "-5px", fontSize: "10px", }}>Emergency Shutdown</Button>
             </Card>
         </div >
 

@@ -1,15 +1,14 @@
-import { Card, CardContent, Button, Typography, Table, TableBody, TableCell, TableContainer, TableRow, Paper, Switch } from "@mui/material"
+import { Button, Typography, Switch, TextField } from "@mui/material"
 import { Link, Router, useParams } from "react-router-dom"
 import SafeReactor from '../assets/SafeReactor.svg'
 import { useEffect, useState, useRef } from 'react'
 import '../App.css'
+import ReactorChart from './ReactorChart'
 
 const Reactor = () => {
     const [hotStuff, setHotStuff] = useState("")
-    const [hotStuffRendering, setHotStuffRendering] = useState(true)
     const [temperature, setTemperature] = useState([])
     const [reactorInput, setReactorInput] = useState("")
-    const canvasRef = useRef(null)
 
     const { id } = useParams()
 
@@ -42,31 +41,24 @@ const Reactor = () => {
         jsonData.state = (await Promise.all([jsonDataReactorState.state]))[0]
         jsonData.control_rods = (await Promise.all([jsonDataRodState.control_rods]))[0]
 
+        setTemperature(prevTemperature => [...prevTemperature, jsonData.temperature.amount].slice(-300))
         setHotStuff(jsonData)
         console.log("jsonData:")
         console.log(jsonData)
-        setHotStuffRendering(false)
     }
 
     const handleReactorInput = async () => {
-        await fetch(`https://nuclear.dacoder.io/reactors/set-react-name/${id}?apiKey=1ca0a1826e8c6b39`, {
+        console.log(reactorInput)
+        await fetch(`https://nuclear.dacoder.io/reactors/set-reactor-name/${id}?apiKey=1ca0a1826e8c6b39`, {
             headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
             method: "PUT",
             body: JSON.stringify({ name: reactorInput }),
-        })
+        }).then(data => (!data.ok) ? console.log(data) : null)
         setReactorInput("")
     }
 
     const interval = () => {
         fetchAll()
-        const getTemperature = async () => {
-            return (await Promise.all([hotStuff.temperature.amount]))[0]
-        }
-        setTemperature(prevTemperature => [...prevTemperature, getTemperature].slice(-200))
-    }
-
-    const getTemperatureState = async () => {
-        return (await Promise.all([temperature]))
     }
 
     useEffect(() => {
@@ -76,37 +68,6 @@ const Reactor = () => {
             clearInterval(idTimer)
         }
     }, [])
-
-    useEffect(() => {
-        const ctx = canvasRef.current
-
-        const myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: Array.from(
-                    { length: 300 },
-                    (_, index) => index + 1
-                ),
-                datasets: [{
-                    label: "Reactor Temperature at Every Second",
-                    data: getTemperatureState(),
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                animation: false,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        })
-
-        return () => {
-            myChart.destroy()
-        }
-    }, [temperature])
 
     const postCall = async (call) => {
         console.log(call)
@@ -185,10 +146,21 @@ const Reactor = () => {
         <div className="Reactor">
             <div className="ReactorNameButtons">
                 <div className="ReactorName">
-                    <input type="text" value={reactorInput} placeholder={hotStuff.name} onChange={(event) => setReactorInput(event.target.value)}></input>
+                    {
+                        (hotStuff != "") ?
+                            <TextField
+                                label="Reactor Name"
+                                id="standard-size-normal"
+                                variant="standard"
+                                defaultValue={(reactorInput == "") ? hotStuff.name : reactorInput}
+                                placeholder={hotStuff.name}
+                                onChange={(event) => setReactorInput(event.target.value)}
+                            />
+                            /* <input type="text" value={reactorInput} placeholder={hotStuff.name} onChange={(event) => setReactorInput(event.target.value)}></input> */
+                            : "..."
+                    }
                     <Button variant="contained" onClick={handleReactorInput}>Change Name</Button>
                 </div>
-                <h1>{hotStuff.name ?? "..."}</h1>
                 <div className="ReactorButtons">
                     <Button variant="contained" onClick={() => { postCall("coolant off") }}>Disable Coolant</Button>
                     <Button variant="contained" onClick={() => { postCall("coolant on") }}>Enable Coolant</Button>
@@ -197,35 +169,50 @@ const Reactor = () => {
                     <Button variant="contained" onClick={() => { postCall("start-reactor") }}>Start Reactor</Button>
                     <Button variant="contained" onClick={() => { postCall("emergency-shutdown") }} color="error">Emergency Shutdown</Button>
                 </div>
+                <div className="back">
+                    <Link to="/">
+                        <div className="backButton">
+                            <Button variant="contained" color="info" size="small">Go Back</Button>
+                        </div>
+                    </Link>
+                </div>
             </div>
             <div className="ReactorChart">
                 <div className="graphReactor">
-                    <canvas ref={canvasRef}></canvas>
+                    <ReactorChart temperature={temperature} name={"Temperature the Last 5 Minutes"} />
                 </div>
                 <div className="reactorInfo">
-                    <Typography className="info">
+                    <p className="info">
                         Temperature: {(parseFloat(hotStuff.temperature?.amount).toFixed(2) ?? "...") +
-                            ((hotStuff.temperature?.unit == "celsius") ? "\xB0 C" : "\xB0 F")}</Typography>
-                    <Typography className="info">
+                            ((hotStuff.temperature?.unit == "celsius") ? "\xB0 C" : "\xB0 F")}</p>
+                    <p className="info">
                         Temperature Level: {hotStuff.temperature?.status ?? "..."}
-                    </Typography>
-                    <Typography className="info">
+                    </p>
+                    <p className="info">
                         Output: {(parseFloat(hotStuff.output?.amount).toFixed(2) ?? "...") +
                             ((hotStuff.output?.unit == "Megawatt (MW)") ? " MW" : "GW")}
-                    </Typography>
-                    <Typography className="info">
+                    </p>
+                    <p className="info">
                         Reactor State: {hotStuff.state ?? "..."}
-                    </Typography>
-                    <Typography className="info">
+                    </p>
+                    <p className="info">
                         Coolant State: {hotStuff.coolant ?? "..."}
-                    </Typography>
-                    <Typography className="info">
+                    </p>
+                    <p className="info">
                         Fuel: {parseFloat(hotStuff.fuel?.percentage).toFixed(2) + "%" ?? "..."}
-                    </Typography>
+                    </p>
                 </div>
-                <div className="reactorInfo">
-                    <Typography>{hotStuff.temperature?.unit ?? "..."}</Typography>
-                    <Switch onClick={() => { postCall("temperature") }} />
+                <div className="switchRods">
+                    <div className="switch">
+                        <Typography>{hotStuff.temperature?.unit ?? "..."}</Typography>
+                        <Switch onClick={() => { postCall("temperature") }} />
+                    </div>
+                    <div className="rods">
+                        <Button variant="contained" onClick={() => { postCall("drop-rod") }}>Drop Rod</Button>
+                        <Button variant="contained" onClick={() => { postCall("raise-rod") }}>Raise Rod</Button>
+                        <Typography>Rods in: {hotStuff.control_rods?.in ?? "..."}</Typography>
+                        <Typography>Rods out: {hotStuff.control_rods?.out ?? "..."}</Typography>
+                    </div>
                 </div>
             </div>
         </div >
