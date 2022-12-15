@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import SafeReactor from '../assets/SafeReactor.svg'
 
 const ReactorCard = (props) => {
-    const { reactor} = props;
+    const { reactor } = props;
 
     const rows = { temp: "79\xB0", tempLevel: "safe", status: "Online", output: "4239 MW" }
 

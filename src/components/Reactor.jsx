@@ -1,4 +1,4 @@
-import { Card, CardContent, Button, Typography, Table, TableBody, TableCell, TableContainer, TableRow, Paper } from "@mui/material"
+import { Card, CardContent, Button, Typography, Table, TableBody, TableCell, TableContainer, TableRow, Paper, Switch } from "@mui/material"
 import { Link, Router, useParams } from "react-router-dom"
 import SafeReactor from '../assets/SafeReactor.svg'
 import { useEffect, useState, useRef } from 'react'
@@ -8,6 +8,7 @@ const Reactor = () => {
     const [hotStuff, setHotStuff] = useState("")
     const [hotStuffRendering, setHotStuffRendering] = useState(true)
     const [temperature, setTemperature] = useState([])
+    const [reactorInput, setReactorInput] = useState("")
     const canvasRef = useRef(null)
 
     const { id } = useParams()
@@ -47,9 +48,17 @@ const Reactor = () => {
         setHotStuffRendering(false)
     }
 
+    const handleReactorInput = async () => {
+        await fetch(`https://nuclear.dacoder.io/reactors/set-react-name/${id}?apiKey=1ca0a1826e8c6b39`, {
+            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+            method: "PUT",
+            body: JSON.stringify({ name: reactorInput }),
+        })
+        setReactorInput("")
+    }
+
     const interval = () => {
         fetchAll()
-        console.log(hotStuff.temperature?.amount)
         const getTemperature = async () => {
             return (await Promise.all([hotStuff.temperature.amount]))[0]
         }
@@ -109,10 +118,10 @@ const Reactor = () => {
                     'Content-Type': 'application/json'
                 }
             })
-            .then(data => (!data.ok) ? console.log(data) : null)
+                .then(data => (!data.ok) ? console.log(data) : null)
         }
         if (call == "coolant off") {
-            fetch(`https://nuclear.dacoder.io/reactors/coolant/${id}?apiKey=1ca0a1826e8c6b39`, {
+            await fetch(`https://nuclear.dacoder.io/reactors/coolant/${id}?apiKey=1ca0a1826e8c6b39`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -122,9 +131,9 @@ const Reactor = () => {
                     "coolant": "off"
                 })
             })
-            .then(data => (!data.ok) ? console.log(data) : null)
+                .then(data => (!data.ok) ? console.log(data) : null)
         } else if (call == "coolant on") {
-            fetch(`https://nuclear.dacoder.io/reactors/coolant/${id}?apiKey=1ca0a1826e8c6b39`, {
+            await fetch(`https://nuclear.dacoder.io/reactors/coolant/${id}?apiKey=1ca0a1826e8c6b39`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -134,29 +143,60 @@ const Reactor = () => {
                     "coolant": "on"
                 })
             })
-            .then(data => (!data.ok) ? console.log(data) : null)
+                .then(data => (!data.ok) ? console.log(data) : null)
+        } else if (call == "temperature") {
+            if (hotStuff.temperature.unit == "fahrenheit") {
+                await fetch(`https://nuclear.dacoder.io/reactors/temperature/?apiKey=1ca0a1826e8c6b39`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "unit": "celsius"
+                    })
+                })
+                    .then(data => (!data.ok) ? console.log(data) : null)
+            } else {
+                await fetch(`https://nuclear.dacoder.io/reactors/temperature/?apiKey=1ca0a1826e8c6b39`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "unit": "fahrenheit"
+                    })
+                })
+            }
         } else {
-            fetch(`https://nuclear.dacoder.io/reactors/${call}/${id}?apiKey=1ca0a1826e8c6b39`, {
+            await fetch(`https://nuclear.dacoder.io/reactors/${call}/${id}?apiKey=1ca0a1826e8c6b39`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 }
             })
-            .then(data => (!data.ok) ? console.log(data) : null)
+                .then(data => (!data.ok) ? console.log(data) : null)
         }
     }
 
     return (
         <div className="Reactor">
             <div className="ReactorNameButtons">
+                <div className="ReactorName">
+                    <input type="text" value={reactorInput} placeholder={hotStuff.name} onChange={(event) => setReactorInput(event.target.value)}></input>
+                    <Button variant="contained" onClick={handleReactorInput}>Change Name</Button>
+                </div>
                 <h1>{hotStuff.name ?? "..."}</h1>
-                <Button variant="contained" onClick={ () => {postCall("coolant off")} }>Disable Coolant</Button>
-                <Button variant="contained" onClick={ () => {postCall("coolant on")} }>Enable Coolant</Button>
-                <Button variant="contained" onClick={ () => {postCall("controlled-shutdown")} }>Controlled Shutdown</Button>
-                <Button variant="contained" onClick={ () => {postCall("refuel")} }>Refuel</Button>
-                <Button variant="contained" onClick={ () => {postCall("start-reactor")} }>Start Reactor</Button>
-                <Button variant="contained" onClick={ () => {postCall("emergency-shutdown")} } color="error">Emergency Shutdown</Button>
+                <div className="ReactorButtons">
+                    <Button variant="contained" onClick={() => { postCall("coolant off") }}>Disable Coolant</Button>
+                    <Button variant="contained" onClick={() => { postCall("coolant on") }}>Enable Coolant</Button>
+                    <Button variant="contained" onClick={() => { postCall("controlled-shutdown") }}>Controlled Shutdown</Button>
+                    <Button variant="contained" onClick={() => { postCall("refuel") }}>Refuel</Button>
+                    <Button variant="contained" onClick={() => { postCall("start-reactor") }}>Start Reactor</Button>
+                    <Button variant="contained" onClick={() => { postCall("emergency-shutdown") }} color="error">Emergency Shutdown</Button>
+                </div>
             </div>
             <div className="ReactorChart">
                 <div className="graphReactor">
@@ -165,13 +205,13 @@ const Reactor = () => {
                 <div className="reactorInfo">
                     <Typography className="info">
                         Temperature: {(parseFloat(hotStuff.temperature?.amount).toFixed(2) ?? "...") +
-                        ((hotStuff.temperature?.unit == "celsius") ? "\xB0 C" : "\xB0 F") }</Typography>
+                            ((hotStuff.temperature?.unit == "celsius") ? "\xB0 C" : "\xB0 F")}</Typography>
                     <Typography className="info">
                         Temperature Level: {hotStuff.temperature?.status ?? "..."}
                     </Typography>
                     <Typography className="info">
                         Output: {(parseFloat(hotStuff.output?.amount).toFixed(2) ?? "...") +
-                                            ((hotStuff.output?.unit == "Megawatt (MW)") ? " MW" : "GW")}
+                            ((hotStuff.output?.unit == "Megawatt (MW)") ? " MW" : "GW")}
                     </Typography>
                     <Typography className="info">
                         Reactor State: {hotStuff.state ?? "..."}
@@ -182,6 +222,10 @@ const Reactor = () => {
                     <Typography className="info">
                         Fuel: {parseFloat(hotStuff.fuel?.percentage).toFixed(2) + "%" ?? "..."}
                     </Typography>
+                </div>
+                <div className="reactorInfo">
+                    <Typography>{hotStuff.temperature?.unit ?? "..."}</Typography>
+                    <Switch onClick={() => { postCall("temperature") }} />
                 </div>
             </div>
         </div >
