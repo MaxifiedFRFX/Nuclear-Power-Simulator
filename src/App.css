@@ -10,6 +10,12 @@
   height: 100%;
 }
 
+@media screen and (max-width: 915px) {
+  .powerPlant {
+    flex-direction: column;
+  }
+}
+
 /* dashboard */
 .dashboard {
   display: flex;
@@ -19,7 +25,12 @@
 
   background-color: #BFD7EA;
   width: 100%;
-  height: calc(100vh - 54px);
+  height: calc(100vh +54px);
+}
+@media screen and (max-width: 915px) {
+  .dashboard {
+    padding: 50px;
+  }
 }
 
 input {
@@ -37,14 +48,49 @@ input::placeholder {
   align-items: center;
   background-color: #D9D9D9;
   width: 475px;
-  height: calc(100vh - 54px);
-  overflow: auto;
+  height: calc(100vh + 54px);
+  overflow-y: auto;
 }
 
-.plantName {
+@media screen and (max-width: 915px) {
+  .reactorsDisplay {
+    width: 100%;
+    height: calc(100vh + 40px);
+  }
+}
+
+/* .plantName {
   display: flex;
   justify-content: center;
   gap: 30px;
+} */
+
+.plantName {
+  margin-bottom: 50px;
+  display: flex;
+  flex-direction: row;
+}
+
+@media screen and (max-width: 915px) {
+  .plantName {
+    flex-direction: column;
+  }
+}
+
+.plantName Button {
+  font-size: 23px;
+  height: 70px;
+}
+.plantName input {
+  font-size: 40px;
+}
+
+@media screen and (max-width: 915px) {
+  .plantName input {
+    font-size: 35px;
+    margin: auto;
+    margin-bottom: 10px;
+  }
 }
 
 .graphAllReactors {
@@ -53,15 +99,19 @@ input::placeholder {
   background-color: #D9D9D9;
   width: 100%;
   height: 400px;
-<<<<<<< HEAD
   width: 100%;
-=======
->>>>>>> 23805012679a7fe98c6c659638b5057f0dc90b29
 }
 
 .totalOutput {
   display: flex;
   justify-content: space-between;
+}
+
+@media screen and (max-width: 915px) {
+  .totalOutput {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 }
 
 .systemLogs {
@@ -84,6 +134,12 @@ footer {
   position: sticky;
   bottom: 0;
 }
+@media screen and (max-width: 915px) {
+  footer {
+    position: static;
+    flex-direction: column;
+  }
+}
 
 .dashboardFooter {
   display: flex;
@@ -98,9 +154,27 @@ footer {
   height: 56px;
 }
 
+@media screen and (max-width: 915px) {
+  .dashboardFooter {
+    flex-direction: column;
+    height: 500px;
+    gap: 50px; 
+    box-sizing: unset;
+    padding-right: 20px;
+    padding-left: 20px;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
 .dashboardFooter Button {
   position: relative;
   top: -20px;
+}
+@media screen and (max-width: 915px) {
+  .dashboardFooter Button {
+    position: static;
+  }
 }
 
 .reactorsFooter {
@@ -115,11 +189,22 @@ footer {
   width: 475px;
   height: 56px;
 }
+@media screen and (max-width: 915px) {
+  .reactorsFooter {
+    position: sticky;
+    width: 100%;
+  }
+}
 
 .reactorsFooter Button {
   position: relative;
   top: -20px;
   width: 280px;
+}
+@media screen and (max-width: 915px) {
+  .reactorsFooter Button {
+    flex-direction: column;
+  }
 }
 
 /* Reacter Cards */
@@ -140,13 +225,17 @@ footer {
 }
 .ReactorName {
   margin-top: 50px;
+  display: flex;
+  flex-direction: column;
 }
 .ReactorName Button {
-  width: 100px;
+  width: 50px;
+  margin-top: 30px;
 }
 .ReactorName input {
   font-size: 50px;
 }
+
 .ReactorButtons {
   display: flex;
   margin: auto;
@@ -157,25 +246,42 @@ footer {
 .ReactorNameButtons Button {
   width: 280px;
 }
+@media screen and (max-width: 1050px) {
+  .ReactorNameButtons Button {
+    margin-top: 40px;
+  }
+}
 .Reactor {
   display: flex;
   background-color: #BFD7EA;
   width: 100%;
   height: calc(100vh);
 }
+@media screen and (max-width: 1050px) {
+  .Reactor {
+    flex-direction: column;
+  }
+}
 .ReactorChart {
   display: flex;
   margin: auto;
   flex-direction: column;
+  background-color: #D9D9D9;
+  padding: 20px;
+}
+@media screen and (max-width: 1050px) {
+  .ReactorChart {
+    margin: 0px;
+  }
 }
 .graphReactor {
   display: flex;
   justify-content: center;
-  background-color: #D9D9D9;
   width: 100%;
   height: 350px;
-  width: 100%;
 }
+
+
 .reactorInfo {
   display: flex;
   flex-direction: row;
@@ -184,4 +290,38 @@ footer {
 .reactorInfo .info {
   background-color: #D9D9D9;
   padding-right: 30px;
+}
+@media screen and (max-width: 1050px) {
+  .reactorInfo {
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+  }
+}
+.switchRods {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #D9D9D9;
+}
+.switch, .rods {
+  display: flex;
+  flex-direction: row;
+  padding-top: 10px;
+}
+.rods {
+  display:flex;
+  justify-content: space-between;
+  width: 500px;
+}
+.backButton {
+  margin-bottom: 50px;
+}
+@media screen and (max-width: 1050px) {
+  .backButton {
+    margin-top: 100px;
+  }
+  .back {
+    justify-content: center;
+  }
 }
