@@ -169,7 +169,8 @@ function App() {
         const myChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                labels: Array.from({ length: 300 },
+                (_, index) => index + 1),
                 datasets: [{
                     label: "Total Average Temperature",
                     data: allAverTemp,
