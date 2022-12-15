@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from 'react'
 import { Button, Link } from '@mui/material'
 import './App.css'
 import ReactorCard from './components/ReactorCard'
-import { SnackbarProvider } from 'notistack';
-import { json } from 'react-router-dom'
+import { SnackbarProvider, withSnackbar } from 'notistack';
+import { } from 'notistack';
 
 function App() {
     const [powerPlantInput, setPowerPlantInput] = useState("")
@@ -79,17 +79,22 @@ function App() {
         return acc + reactor.temperature.amount
     }, 0) / hotStuff.reactors.length
 
-    const handleGlobalControlledShutdown = hotStuff.reactors.map(async reactor => {
-        await fetch(`https://nuclear.dacoder.io/reactors/controlled-shutdown/${reactor.id}?apiKey=1ca0a1826e8c6b39`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            }
-        })}
-    )
 
-    const globalEmergencyShutdown = hotStuff.reactors.map(async reactor => {
+    const handleGlobalControlledShutdown = () => {
+        hotStuff.reactors.map(async reactor => {
+            await fetch(`https://nuclear.dacoder.io/reactors/controlled-shutdown/${reactor.id}?apiKey=1ca0a1826e8c6b39`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                }
+            })
+        }
+        )
+    }
+
+    const globalEmergencyShutdown = () => {
+        hotStuff.reactors.map(async reactor => {
         await fetch(`https://nuclear.dacoder.io/reactors/emergency-shutdown/${reactor.id}?apiKey=1ca0a1826e8c6b39`, {
             method: 'POST',
             headers: {
@@ -97,10 +102,11 @@ function App() {
                 'Content-Type': 'application/json',
             }
         })}
-    )
-        
+    )}
 
-    const globalDisableCoolant = hotStuff.reactors.map(async reactor => {
+
+    const globalDisableCoolant = () => { 
+        hotStuff.reactors.map(async reactor => {
         await fetch(`https://nuclear.dacoder.io/reactors/coolant/${reactor.id}?apiKey=1ca0a1826e8c6b39`), {
             method: 'POST',
             body: JSON.stringify({
@@ -110,9 +116,11 @@ function App() {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             }
-        }})
-    
-    const globalEnableCoolant = hotStuff.reactors.map(async reactor => {
+        }
+    })}
+
+    const globalEnableCoolant = () => {
+        hotStuff.reactors.map(async reactor => {
         await fetch(`https://nuclear.dacoder.io/reactors/coolant/${reactor.id}?apiKey=1ca0a1826e8c6b39`), {
             method: 'POST',
             body: JSON.stringify({
@@ -122,7 +130,8 @@ function App() {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             }
-        }})
+        }
+    })}
 
     const globalReset = async () => {
         await fetch(`https://nuclear.dacoder.io/reactors/reset?apiKey=1ca0a1826e8c6b39`, {
@@ -139,7 +148,7 @@ function App() {
     const interval = () => {
         fetchLogData()
         fetchAll()
-        setAllAverTemp(prevAllAverTemp => [...prevAllAverTemp, getAverageTemp].slice(-200))
+        setAllAverTemp(prevAllAverTemp => [...prevAllAverTemp, getAverageTemp].slice(-20))
     }
 
     useEffect(() => {
@@ -160,7 +169,7 @@ function App() {
         const myChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: allAverTemp.map((index) => index),
+                labels: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 datasets: [{
                     label: "Total Average Temperature",
                     data: allAverTemp,
@@ -180,9 +189,7 @@ function App() {
         return () => {
             myChart.destroy()
         }
-    }, []
-    // [allAverTemp]
-    )
+    }, [allAverTemp])
 
     return (
         <div className="body">
