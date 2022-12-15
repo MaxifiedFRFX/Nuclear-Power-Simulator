@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Button, Link } from '@mui/material'
 import './App.css'
 import ReactorCard from './components/ReactorCard'
+import { SnackbarProvider } from 'notistack';
 import { json } from 'react-router-dom'
 
 function App() {
@@ -89,7 +90,7 @@ function App() {
     )
 
     const globalEmergencyShutdown = hotStuff.reactors.map(async reactor => {
-        await fetch(` https://nuclear.dacoder.io/reactors/emergency-shutdown/${reactor.id}?apiKey=1ca0a1826e8c6b39`, {
+        await fetch(`https://nuclear.dacoder.io/reactors/emergency-shutdown/${reactor.id}?apiKey=1ca0a1826e8c6b39`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -97,6 +98,31 @@ function App() {
             }
         })}
     )
+        
+
+    const globalDisableCoolant = hotStuff.reactors.map(async reactor => {
+        await fetch(`https://nuclear.dacoder.io/reactors/coolant/${reactor.id}?apiKey=1ca0a1826e8c6b39`), {
+            method: 'POST',
+            body: JSON.stringify({
+                "coolant": "off"
+            }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        }})
+    
+    const globalEnableCoolant = hotStuff.reactors.map(async reactor => {
+        await fetch(`https://nuclear.dacoder.io/reactors/coolant/${reactor.id}?apiKey=1ca0a1826e8c6b39`), {
+            method: 'POST',
+            body: JSON.stringify({
+                "coolant": "on"
+            }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        }})
 
     const globalReset = async () => {
         await fetch(`https://nuclear.dacoder.io/reactors/reset?apiKey=1ca0a1826e8c6b39`, {
@@ -194,8 +220,8 @@ function App() {
             </div>
             <footer>
                 <section className="dashboardFooter">
-                    <Button variant="contained">Enable Coolants on all Reactors</Button>
-                    <Button variant="contained">Disable Coolants on all Reactors</Button>
+                    <Button variant="contained" onClick={globalEnableCoolant}>Enable Coolants on all Reactors</Button>
+                    <Button variant="contained" onClick={globalDisableCoolant}>Disable Coolants on all Reactors</Button>
                     <Button variant="contained" onClick={handleGlobalControlledShutdown}>Global Controlled Shutdown</Button>
                     <Button variant="contained" color="error" onClick={globalReset}>Global Reset</Button>
                 </section>
